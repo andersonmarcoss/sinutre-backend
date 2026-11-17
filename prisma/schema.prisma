@@ -11,7 +11,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -25,41 +25,41 @@ model User {
   gender      String    @default("NAO_ESPECIFICADO") // GENDERCHOICE
   createdAt   DateTime  @default(now()) @map("created_at")
 
-  meals       Meal[]
-  foods       Food[]
-  weightLogs  WeightLog[]
-  healthData  HealthData[]
+  meals      Meal[]
+  foods      Food[]
+  weightLogs WeightLog[]
+  healthData HealthData[]
 
   @@map("users")
 }
 
 model Meal {
-  id          Int       @id @default(autoincrement())
-  type        String    // MEALCHOICE
-  eatTime     DateTime  @map("eat_time")
+  id          Int      @id @default(autoincrement())
+  type        String // MEALCHOICE
+  eatTime     DateTime @map("eat_time")
   description String?
-  createdAt   DateTime  @default(now()) @map("created_at")
+  createdAt   DateTime @default(now()) @map("created_at")
 
-  userId      Int       @map("user_id")
-  user        User      @relation(fields: [userId], references: [id])
+  userId Int  @map("user_id")
+  user   User @relation(fields: [userId], references: [id])
 
-  foods       MealFood[]
+  foods MealFood[]
 
   @@map("meals")
 }
 
 model Food {
-  id              Int        @id @default(autoincrement())
+  id              Int    @id @default(autoincrement())
   name            String
-  caloriesPer100g Float      @map("calories_per_100g")
-  carbsPer100g    Float      @map("carbs_per_100g")
-  proteinPer100g  Float      @map("protein_per_100g")
-  fatPer100g      Float      @map("fat_per_100g")
+  caloriesPer100g Float  @map("calories_per_100g")
+  carbsPer100g    Float  @map("carbs_per_100g")
+  proteinPer100g  Float  @map("protein_per_100g")
+  fatPer100g      Float  @map("fat_per_100g")
 
-  userId          Int        @map("user_id")
-  user            User       @relation(fields: [userId], references: [id])
+  userId Int  @map("user_id")
+  user   User @relation(fields: [userId], references: [id])
 
-  meals           MealFood[]
+  meals MealFood[]
 
   @@map("foods")
 }
@@ -87,22 +87,22 @@ model WeightLog {
   weight    Float
   createdAt DateTime @default(now()) @map("created_at")
 
-  userId    Int      @map("user_id")
-  user      User     @relation(fields: [userId], references: [id])
+  userId Int  @map("user_id")
+  user   User @relation(fields: [userId], references: [id])
 
   @@map("weight_logs")
 }
 
 model HealthData {
-  id               Int       @id @default(autoincrement())
-  targetDietDaily  Int       @map("target_diet_daily")
-  levelActivity    String    @map("level_activity") // LEVELCHOICE
-  createdAt        DateTime  @default(now()) @map("created_at")
-  closedAt         DateTime? @map("closed_at")
-  isActive         Boolean   @default(true) @map("is_active")
+  id              Int       @id @default(autoincrement())
+  targetDietDaily Int       @map("target_diet_daily")
+  levelActivity   String    @map("level_activity") // LEVELCHOICE
+  createdAt       DateTime  @default(now()) @map("created_at")
+  closedAt        DateTime? @map("closed_at")
+  isActive        Boolean   @default(true) @map("is_active")
 
-  userId           Int       @map("user_id")
-  user             User      @relation(fields: [userId], references: [id])
+  userId Int  @map("user_id")
+  user   User @relation(fields: [userId], references: [id])
 
   @@map("health_data")
 }
