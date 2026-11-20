@@ -1,4 +1,4 @@
-interface CreateMealDTO {
+export interface CreateMealDTO {
   type: string;
   eatTime: string;
   description?: string;
