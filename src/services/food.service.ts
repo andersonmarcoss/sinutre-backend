@@ -11,7 +11,7 @@ export async function listFoods(userId: number, search: string) {
         ? {
             name: {
               contains: trimmedSearch,
-              //mode: insensitive (descomentar quando voltar para o postgresql)
+              //mode: 'insensitive' (descomentar quando voltar para o postgresql)
             },
           }
         : {}),
