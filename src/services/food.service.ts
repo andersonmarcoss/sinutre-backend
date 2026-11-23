@@ -2,14 +2,21 @@ import { prisma } from '../prisma';
 import { CreateFoodDTO } from '../dto/foodDTO';
 
 export async function listFoods(userId: number, search: string) {
+  const trimmedSearch = search.trim();
+
   return prisma.food.findMany({
     where: {
       userId,
-      name: {
-        contains: search,
-      },
+      ...(trimmedSearch
+        ? {
+            name: {
+              contains: trimmedSearch,
+              //mode: insensitive (descomentar quando voltar para o postgresql)
+            },
+          }
+        : {}),
     },
-    take: 10,
+    ...(trimmedSearch ? { take: 10 } : {}),
     orderBy: {
       name: 'asc',
     },
