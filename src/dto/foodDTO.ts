@@ -5,3 +5,5 @@ export interface CreateFoodDTO {
   proteinPer100g: number;
   fatPer100g: number;
 }
+
+export type UpdateFoodDTO = CreateFoodDTO;

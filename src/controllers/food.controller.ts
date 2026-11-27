@@ -18,3 +18,9 @@ export async function deleteFood(req: Request, res: Response) {
   await foodService.deleteFood(req.userId!, foodId);
   return res.sendStatus(204);
 }
+
+export async function updateFood(req: Request, res: Response) {
+  const foodId = parsePositiveId(req.params.id, 'ID do alimento');
+  const food = await foodService.updateFood(req.userId!, foodId, req.body);
+  return res.json(food);
+}

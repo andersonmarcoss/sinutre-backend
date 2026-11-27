@@ -1,5 +1,5 @@
 import { prisma } from '../prisma';
-import { CreateFoodDTO } from '../dto/foodDTO';
+import { CreateFoodDTO, UpdateFoodDTO } from '../dto/foodDTO';
 import { HttpError } from '../middlewares/error.middleware';
 
 export async function listFoods(userId: number, search: string) {
@@ -37,7 +37,7 @@ export async function createFood(userId: number, data: CreateFoodDTO) {
   });
 }
 
-export async function deleteFood(userId: number, foodId: number) {
+async function findOwnedFood(userId: number, foodId: number) {
   const food = await prisma.food.findFirst({
     where: {
       id: foodId,
@@ -48,6 +48,12 @@ export async function deleteFood(userId: number, foodId: number) {
   if (!food) {
     throw new HttpError(404, 'Alimento não encontrado.');
   }
+
+  return food;
+}
+
+export async function deleteFood(userId: number, foodId: number) {
+  const food = await findOwnedFood(userId, foodId);
 
   const usageCount = await prisma.mealFood.count({
     where: { foodId },
@@ -64,5 +70,24 @@ export async function deleteFood(userId: number, foodId: number) {
 
   await prisma.food.delete({
     where: { id: foodId },
+  });
+}
+
+export async function updateFood(
+  userId: number,
+  foodId: number,
+  data: UpdateFoodDTO,
+) {
+  await findOwnedFood(userId, foodId);
+
+  return prisma.food.update({
+    where: { id: foodId },
+    data: {
+      name: data.name,
+      caloriesPer100g: data.caloriesPer100g,
+      carbsPer100g: data.carbsPer100g,
+      proteinPer100g: data.proteinPer100g,
+      fatPer100g: data.fatPer100g,
+    },
   });
 }
