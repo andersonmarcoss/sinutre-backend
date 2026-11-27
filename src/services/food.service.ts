@@ -53,7 +53,7 @@ async function findOwnedFood(userId: number, foodId: number) {
 }
 
 export async function deleteFood(userId: number, foodId: number) {
-  const food = await findOwnedFood(userId, foodId);
+  await findOwnedFood(userId, foodId);
 
   const usageCount = await prisma.mealFood.count({
     where: { foodId },

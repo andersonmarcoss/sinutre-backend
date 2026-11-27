@@ -5,6 +5,7 @@ import { authRoutes } from './routes/auth.routes';
 import { mealsRoutes } from './routes/meals.routes';
 import { foodRouter } from './routes/food.routes';
 import { errorHandler } from './middlewares/error.middleware';
+import { profileRoutes } from './routes/profile.routes';
 
 export const app = express();
 
@@ -17,5 +18,6 @@ app.get('/health', (_req, res) => {
 
 app.use('/auth', authRoutes);
 app.use('/meals', mealsRoutes);
-app.use('/foods', foodRouter)
-app.use(errorHandler)
+app.use('/foods', foodRouter);
+app.use('/profile', profileRoutes);
+app.use(errorHandler);
