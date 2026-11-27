@@ -1,5 +1,6 @@
 import { prisma } from '../prisma';
 import { CreateFoodDTO } from '../dto/foodDTO';
+import { HttpError } from '../middlewares/error.middleware';
 
 export async function listFoods(userId: number, search: string) {
   const trimmedSearch = search.trim();
@@ -33,5 +34,35 @@ export async function createFood(userId: number, data: CreateFoodDTO) {
       fatPer100g: data.fatPer100g,
       userId,
     },
+  });
+}
+
+export async function deleteFood(userId: number, foodId: number) {
+  const food = await prisma.food.findFirst({
+    where: {
+      id: foodId,
+      userId,
+    },
+  });
+
+  if (!food) {
+    throw new HttpError(404, 'Alimento não encontrado.');
+  }
+
+  const usageCount = await prisma.mealFood.count({
+    where: { foodId },
+  });
+
+  if (usageCount > 0) {
+    throw new HttpError(
+      409,
+      `Este alimento não pode ser excluído porque é usado em ${usageCount} ${
+        usageCount === 1 ? 'refeição' : 'refeições'
+      }.`,
+    );
+  }
+
+  await prisma.food.delete({
+    where: { id: foodId },
   });
 }
