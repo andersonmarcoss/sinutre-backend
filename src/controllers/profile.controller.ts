@@ -12,3 +12,9 @@ export async function createProfile(req: Request, res: Response) {
   const profile = await profileService.createProfile(req.userId!, data);
   return res.status(201).json(profile);
 }
+
+export async function updateProfile(req: Request, res: Response) {
+  const data = validateProfile(req.body);
+  const profile = await profileService.updateProfile(req.userId!, data);
+  return res.json(profile);
+}
