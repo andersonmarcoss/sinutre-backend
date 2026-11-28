@@ -6,6 +6,7 @@ import { mealsRoutes } from './routes/meals.routes';
 import { foodRouter } from './routes/food.routes';
 import { errorHandler } from './middlewares/error.middleware';
 import { profileRoutes } from './routes/profile.routes';
+import { metricsRoutes } from './routes/metrics.routes';
 
 export const app = express();
 
@@ -20,4 +21,5 @@ app.use('/auth', authRoutes);
 app.use('/meals', mealsRoutes);
 app.use('/foods', foodRouter);
 app.use('/profile', profileRoutes);
+app.use('/metrics', metricsRoutes);
 app.use(errorHandler);
